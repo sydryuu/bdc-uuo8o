@@ -1,0 +1,85 @@
+{
+  "generatedAt": "2026-10-06T03:41:29.000Z",
+  "books": [
+    {
+      "id": "pep-3a",
+      "name": "人教PEP 三年级上",
+      "stage": "primary",
+      "stageName": "小学",
+      "order": 31,
+      "wordCount": 64,
+      "version": "650867da9f",
+      "file": "books/pep-3a.json"
+    },
+    {
+      "id": "pep-3b",
+      "name": "人教PEP 三年级下",
+      "stage": "primary",
+      "stageName": "小学",
+      "order": 32,
+      "wordCount": 72,
+      "version": "f88a787fef",
+      "file": "books/pep-3b.json"
+    },
+    {
+      "id": "pep-4a",
+      "name": "人教PEP 四年级上",
+      "stage": "primary",
+      "stageName": "小学",
+      "order": 41,
+      "wordCount": 84,
+      "version": "eac2896e07",
+      "file": "books/pep-4a.json"
+    },
+    {
+      "id": "pep-4b",
+      "name": "人教PEP 四年级下",
+      "stage": "primary",
+      "stageName": "小学",
+      "order": 42,
+      "wordCount": 104,
+      "version": "b026f979f6",
+      "file": "books/pep-4b.json"
+    },
+    {
+      "id": "pep-5a",
+      "name": "人教PEP 五年级上",
+      "stage": "primary",
+      "stageName": "小学",
+      "order": 51,
+      "wordCount": 130,
+      "version": "a477400e14",
+      "file": "books/pep-5a.json"
+    },
+    {
+      "id": "pep-5b",
+      "name": "人教PEP 五年级下",
+      "stage": "primary",
+      "stageName": "小学",
+      "order": 52,
+      "wordCount": 155,
+      "version": "9f36fdb008",
+      "file": "books/pep-5b.json"
+    },
+    {
+      "id": "pep-6a",
+      "name": "人教PEP 六年级上",
+      "stage": "primary",
+      "stageName": "小学",
+      "order": 61,
+      "wordCount": 129,
+      "version": "61d623d6e1",
+      "file": "books/pep-6a.json"
+    },
+    {
+      "id": "pep-6b",
+      "name": "人教PEP 六年级下",
+      "stage": "primary",
+      "stageName": "小学",
+      "order": 62,
+      "wordCount": 108,
+      "version": "db5afdb210",
+      "file": "books/pep-6b.json"
+    }
+  ]
+}
