@@ -8,6 +8,9 @@ export interface EcEntry {
   translation: string
   tag: string
   frq: number
+  bnc: number
+  collins: number
+  oxford: boolean
 }
 
 export function toEcEntry(row: Record<string, string>): EcEntry {
@@ -17,19 +20,28 @@ export function toEcEntry(row: Record<string, string>): EcEntry {
     translation: row.translation ?? '',
     tag: row.tag ?? '',
     frq: Number(row.frq) || 0,
+    bnc: Number(row.bnc) || 0,
+    collins: Number(row.collins) || 0,
+    oxford: row.oxford === '1',
   }
 }
 
+/** 流式遍历 ECDICT 每一行 */
+export async function scanEcdict(path: string, onRow: (e: EcEntry) => void): Promise<void> {
+  const parser = createReadStream(path).pipe(parse({ columns: true, relax_quotes: true, relax_column_count: true }))
+  for await (const row of parser as AsyncIterable<Record<string, string>>) if (row.word) onRow(toEcEntry(row))
+}
+
 /** 返回 小写词 → 条目。同一个小写词有多条（如 OK / ok）时，优先大小写完全一致的 */
+export function pickWanted(out: Map<string, EcEntry>, wanted: Map<string, string>, e: EcEntry) {
+  const key = e.word.toLowerCase()
+  if (!wanted.has(key)) return
+  if (out.has(key) && e.word !== wanted.get(key)) return
+  out.set(key, e)
+}
+
 export async function loadEcdict(path: string, wanted: Map<string, string>): Promise<Map<string, EcEntry>> {
   const out = new Map<string, EcEntry>()
-  const parser = createReadStream(path).pipe(parse({ columns: true, relax_quotes: true, relax_column_count: true }))
-  for await (const row of parser as AsyncIterable<Record<string, string>>) {
-    const key = row.word?.toLowerCase()
-    if (!key || !wanted.has(key)) continue
-    const exact = row.word === wanted.get(key)
-    if (out.has(key) && !exact) continue
-    out.set(key, toEcEntry(row))
-  }
+  await scanEcdict(path, (e) => pickWanted(out, wanted, e))
   return out
 }

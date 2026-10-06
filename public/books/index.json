@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-06T03:41:29.000Z",
+  "generatedAt": "2026-10-06T05:25:35.055Z",
   "books": [
     {
       "id": "pep-3a",
@@ -9,7 +9,8 @@
       "order": 31,
       "wordCount": 64,
       "version": "650867da9f",
-      "file": "books/pep-3a.json"
+      "file": "books/pep-3a.json",
+      "bytes": 41083
     },
     {
       "id": "pep-3b",
@@ -19,7 +20,8 @@
       "order": 32,
       "wordCount": 72,
       "version": "f88a787fef",
-      "file": "books/pep-3b.json"
+      "file": "books/pep-3b.json",
+      "bytes": 43853
     },
     {
       "id": "pep-4a",
@@ -29,7 +31,8 @@
       "order": 41,
       "wordCount": 84,
       "version": "eac2896e07",
-      "file": "books/pep-4a.json"
+      "file": "books/pep-4a.json",
+      "bytes": 51409
     },
     {
       "id": "pep-4b",
@@ -39,7 +42,8 @@
       "order": 42,
       "wordCount": 104,
       "version": "b026f979f6",
-      "file": "books/pep-4b.json"
+      "file": "books/pep-4b.json",
+      "bytes": 57641
     },
     {
       "id": "pep-5a",
@@ -49,7 +53,8 @@
       "order": 51,
       "wordCount": 130,
       "version": "a477400e14",
-      "file": "books/pep-5a.json"
+      "file": "books/pep-5a.json",
+      "bytes": 77525
     },
     {
       "id": "pep-5b",
@@ -59,7 +64,8 @@
       "order": 52,
       "wordCount": 155,
       "version": "9f36fdb008",
-      "file": "books/pep-5b.json"
+      "file": "books/pep-5b.json",
+      "bytes": 90240
     },
     {
       "id": "pep-6a",
@@ -69,7 +75,8 @@
       "order": 61,
       "wordCount": 129,
       "version": "61d623d6e1",
-      "file": "books/pep-6a.json"
+      "file": "books/pep-6a.json",
+      "bytes": 78821
     },
     {
       "id": "pep-6b",
@@ -79,7 +86,206 @@
       "order": 62,
       "wordCount": 108,
       "version": "db5afdb210",
-      "file": "books/pep-6b.json"
+      "file": "books/pep-6b.json",
+      "bytes": 65323
+    },
+    {
+      "id": "pep-7a",
+      "name": "人教初中 七年级上",
+      "stage": "junior",
+      "stageName": "初中",
+      "order": 71,
+      "wordCount": 386,
+      "version": "311323ad6d",
+      "file": "books/pep-7a.json",
+      "bytes": 224350
+    },
+    {
+      "id": "pep-7b",
+      "name": "人教初中 七年级下",
+      "stage": "junior",
+      "stageName": "初中",
+      "order": 72,
+      "wordCount": 492,
+      "version": "fb6213bf07",
+      "file": "books/pep-7b.json",
+      "bytes": 289487
+    },
+    {
+      "id": "pep-8a",
+      "name": "人教初中 八年级上",
+      "stage": "junior",
+      "stageName": "初中",
+      "order": 81,
+      "wordCount": 418,
+      "version": "d1bb329b83",
+      "file": "books/pep-8a.json",
+      "bytes": 254754
+    },
+    {
+      "id": "pep-8b",
+      "name": "人教初中 八年级下",
+      "stage": "junior",
+      "stageName": "初中",
+      "order": 82,
+      "wordCount": 463,
+      "version": "96cf2392ba",
+      "file": "books/pep-8b.json",
+      "bytes": 270357
+    },
+    {
+      "id": "pep-9",
+      "name": "人教初中 九年级全一册",
+      "stage": "junior",
+      "stageName": "初中",
+      "order": 91,
+      "wordCount": 550,
+      "version": "195192cf6b",
+      "file": "books/pep-9.json",
+      "bytes": 323701
+    },
+    {
+      "id": "pep-hs1",
+      "name": "人教高中 必修1",
+      "stage": "senior",
+      "stageName": "高中",
+      "order": 101,
+      "wordCount": 311,
+      "version": "6bca33c08e",
+      "file": "books/pep-hs1.json",
+      "bytes": 176177
+    },
+    {
+      "id": "pep-hs2",
+      "name": "人教高中 必修2",
+      "stage": "senior",
+      "stageName": "高中",
+      "order": 102,
+      "wordCount": 319,
+      "version": "cc3e314177",
+      "file": "books/pep-hs2.json",
+      "bytes": 178336
+    },
+    {
+      "id": "pep-hs3",
+      "name": "人教高中 必修3",
+      "stage": "senior",
+      "stageName": "高中",
+      "order": 103,
+      "wordCount": 366,
+      "version": "450a635b36",
+      "file": "books/pep-hs3.json",
+      "bytes": 205016
+    },
+    {
+      "id": "pep-hs4",
+      "name": "人教高中 必修4",
+      "stage": "senior",
+      "stageName": "高中",
+      "order": 104,
+      "wordCount": 307,
+      "version": "501728ca9e",
+      "file": "books/pep-hs4.json",
+      "bytes": 162620
+    },
+    {
+      "id": "pep-hs5",
+      "name": "人教高中 必修5",
+      "stage": "senior",
+      "stageName": "高中",
+      "order": 105,
+      "wordCount": 357,
+      "version": "041ea7fa61",
+      "file": "books/pep-hs5.json",
+      "bytes": 199539
+    },
+    {
+      "id": "pep-hs6",
+      "name": "人教高中 选修6",
+      "stage": "senior",
+      "stageName": "高中",
+      "order": 106,
+      "wordCount": 391,
+      "version": "931c6584ee",
+      "file": "books/pep-hs6.json",
+      "bytes": 221375
+    },
+    {
+      "id": "pep-hs7",
+      "name": "人教高中 选修7",
+      "stage": "senior",
+      "stageName": "高中",
+      "order": 107,
+      "wordCount": 384,
+      "version": "f3301256fd",
+      "file": "books/pep-hs7.json",
+      "bytes": 219350
+    },
+    {
+      "id": "pep-hs8",
+      "name": "人教高中 选修8",
+      "stage": "senior",
+      "stageName": "高中",
+      "order": 108,
+      "wordCount": 420,
+      "version": "6ac8397c2e",
+      "file": "books/pep-hs8.json",
+      "bytes": 237344
+    },
+    {
+      "id": "pep-hs9",
+      "name": "人教高中 选修9",
+      "stage": "senior",
+      "stageName": "高中",
+      "order": 109,
+      "wordCount": 352,
+      "version": "a5897bf0db",
+      "file": "books/pep-hs9.json",
+      "bytes": 186812
+    },
+    {
+      "id": "pep-hs10",
+      "name": "人教高中 选修10",
+      "stage": "senior",
+      "stageName": "高中",
+      "order": 110,
+      "wordCount": 361,
+      "version": "b27a06d011",
+      "file": "books/pep-hs10.json",
+      "bytes": 179964
+    },
+    {
+      "id": "pep-hs11",
+      "name": "人教高中 选修11",
+      "stage": "senior",
+      "stageName": "高中",
+      "order": 111,
+      "wordCount": 309,
+      "version": "fd9b4056e3",
+      "file": "books/pep-hs11.json",
+      "bytes": 159216
+    },
+    {
+      "id": "cet4",
+      "name": "大学英语四级",
+      "stage": "cet4",
+      "stageName": "四级",
+      "order": 200,
+      "wordCount": 4544,
+      "version": "5fd9e6896a",
+      "file": "books/cet4.json",
+      "bytes": 2809543
+    },
+    {
+      "id": "cet6",
+      "name": "大学英语六级",
+      "stage": "cet6",
+      "stageName": "六级",
+      "order": 300,
+      "wordCount": 3991,
+      "version": "b813a34008",
+      "file": "books/cet6.json",
+      "bytes": 2243642
     }
   ]
 }

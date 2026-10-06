@@ -44,10 +44,16 @@ export default defineConfig(({ mode }) => {
           ],
         },
         workbox: {
-          // 词书 JSON 一起预缓存（小学词书共约 400KB）；后面加大词书时改成按需缓存
-          globPatterns: ['**/*.{js,css,html,png,svg,json}'],
+          // 小学词书随应用预缓存（约 400KB）；初高中、四六级选中时才下载（存进 IndexedDB 后离线可用）
+          globPatterns: ['**/*.{js,css,html,png,svg}', 'books/index.json', 'books/pep-[3456][ab].json'],
           navigateFallback: 'index.html',
           runtimeCaching: [
+            {
+              // 常用词典分片：查过的字母离线也能查
+              urlPattern: ({ url }) => url.pathname.includes('/dict/') && url.pathname.endsWith('.json'),
+              handler: 'StaleWhileRevalidate',
+              options: { cacheName: 'dict', expiration: { maxEntries: 40 } },
+            },
             {
               // 有道发音：播放过的音频缓存起来，离线也能放。接口不带 CORS 头，只能存成不透明响应（status 0）
               urlPattern: ({ url }) => url.hostname === 'dict.youdao.com' && url.pathname === '/dictvoice',

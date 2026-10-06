@@ -2,7 +2,6 @@ import type { ReactNode } from 'react'
 import { speak } from '../audio/player'
 import { Segmented, Stepper, SubHeader, Toggle } from '../components/ui'
 import { navigate } from '../lib/router'
-import { isPersisted } from '../lib/feedback'
 import { updateSettings, useSettings, type Accent, type Theme } from '../lib/settings'
 
 function Row({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
@@ -30,7 +29,6 @@ const isIOS = typeof navigator !== 'undefined' && /iPhone|iPad|iPod/.test(naviga
 
 export function SettingsPage() {
   const s = useSettings()
-  const persisted = isPersisted()
   return (
     <div className="mx-auto max-w-lg px-4 pb-28">
       <SubHeader title="设置" back={() => navigate('me', { replace: true })} backLabel="我的" />
@@ -77,20 +75,6 @@ export function SettingsPage() {
         </Row>
       </Group>
 
-      <Group title="数据">
-        <Row
-          title="本地存储"
-          hint={
-            persisted
-              ? '已开启持久化，浏览器不会自动清理'
-              : persisted === false
-                ? '未获得持久化权限。添加到主屏幕后更安全，阶段 3 会加入备份'
-                : '浏览器不支持查询'
-          }
-        >
-          <span className={`shrink-0 whitespace-nowrap text-sm font-medium ${persisted ? 'text-emerald-600' : 'text-amber-500'}`}>{persisted ? '安全' : '注意'}</span>
-        </Row>
-      </Group>
 
       <section className="mt-8 space-y-1 px-1 text-xs leading-relaxed text-stone-400">
         <p>词库：KyleBing/english-vocabulary（BSD-3）、ECDICT（MIT）</p>

@@ -112,6 +112,11 @@ describe('熟练度与可出题型', () => {
     expect(eligibleTypes(POOL[0], 2)).toEqual(['en2cn', 'cn2en', 'listen', 'spell'])
     expect(eligibleTypes(TALK, 2, true)).toEqual(['en2cn', 'cn2en', 'listen'])
   })
+  it('没有释义的词只出听音选词，第一次见也一样', () => {
+    const bare = { ...TALK, meanings: [] }
+    expect(eligibleTypes(bare, 2)).toEqual(['listen'])
+    expect(chooseQuizType(eligibleTypes(bare, 0), undefined, true, seeded())).toBe('listen')
+  })
   it('chooseQuizType：第一次见固定英选中，之后不连续重复', () => {
     const types = eligibleTypes(TALK, 2)
     expect(chooseQuizType(types, undefined, true, seeded())).toBe('en2cn')

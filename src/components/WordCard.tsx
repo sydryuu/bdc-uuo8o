@@ -1,9 +1,9 @@
 import { db } from '../db/db'
 import { useLive } from '../lib/useLive'
-import { addPhraseCard, removePhraseCard } from '../srs/store'
+import { addPhraseCard, removePhraseCard, toggleFavorite } from '../srs/store'
 import { phraseCardId, State } from '../srs/scheduler'
 import type { Phrase, Word } from '../types/vocab'
-import { CheckIcon, PlusIcon } from './icons'
+import { CheckIcon, PlusIcon, StarIcon } from './icons'
 import { SpeakButton } from './SpeakButton'
 
 export function PosTag({ pos }: { pos: string }) {
@@ -58,6 +58,25 @@ function AddPhraseButton({ word, phrase, bookId, state }: { word: Word; phrase: 
   )
 }
 
+/** 收藏按钮（加入生词本） */
+export function FavoriteButton({ word, className = '' }: { word: Word; className?: string }) {
+  const fav = useLive(async () => !!(await db.favorites.get(word.id)), [word.id])
+  return (
+    <button
+      type="button"
+      aria-label={fav ? '已收藏，点击取消' : '收藏到生词本'}
+      aria-pressed={!!fav}
+      onClick={(e) => {
+        e.stopPropagation()
+        toggleFavorite(word)
+      }}
+      className={`flex size-11 items-center justify-center rounded-full ${fav ? 'text-amber-500' : 'text-stone-300 dark:text-stone-600'} ${className}`}
+    >
+      <StarIcon filled={!!fav} />
+    </button>
+  )
+}
+
 /** 完整单词卡：单词、音标、释义、例句、短语。传入 bookId 时短语可以单独加入学习 */
 export function WordCard({ word, compact = false, bookId }: { word: Word; compact?: boolean; bookId?: string }) {
   const phraseStates = useLive(async () => {
@@ -66,7 +85,8 @@ export function WordCard({ word, compact = false, bookId }: { word: Word; compac
   }, [word.id])
   return (
     <div className="animate-rise">
-      <div className="text-center">
+      <div className="relative text-center">
+        <FavoriteButton word={word} className="absolute -top-2 -right-2" />
         <h1 className="break-words text-5xl font-bold tracking-tight text-stone-900 dark:text-white">{word.word}</h1>
         <div className="mt-2">
           <Phonetics word={word} />

@@ -3,6 +3,11 @@ import { TabBar } from './components/TabBar'
 import { useRoute } from './lib/router'
 import { useSettings } from './lib/settings'
 import { BooksPage } from './pages/BooksPage'
+import { DataPage } from './pages/DataPage'
+import { FavoritesPage } from './pages/FavoritesPage'
+import { ImportPage } from './pages/ImportPage'
+import { SearchPage } from './pages/SearchPage'
+import { WordPage } from './pages/WordPage'
 import { MePage } from './pages/MePage'
 import { MistakesPage } from './pages/MistakesPage'
 import { StatsPage } from './pages/StatsPage'
@@ -38,6 +43,11 @@ export function App() {
       {route === 'me' && <MePage />}
       {route === 'mistakes' && <MistakesPage />}
       {route === 'settings' && <SettingsPage />}
+      {route === 'search' && <SearchPage />}
+      {route === 'favorites' && <FavoritesPage />}
+      {route === 'word' && <WordPage />}
+      {route === 'import' && <ImportPage />}
+      {route === 'data' && <DataPage />}
       <TabBar current={route} />
     </>
   )

@@ -11,6 +11,8 @@ export interface Settings {
   theme: Theme
   vibrate: boolean
   currentBookId: string
+  /** 每隔几天提醒备份，0 = 不提醒 */
+  backupDays: number
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -20,6 +22,7 @@ export const DEFAULT_SETTINGS: Settings = {
   theme: 'system',
   vibrate: true,
   currentBookId: 'pep-3a',
+  backupDays: 7,
 }
 
 const KEY = 'settings'

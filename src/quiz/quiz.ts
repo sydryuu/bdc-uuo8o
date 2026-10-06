@@ -147,6 +147,8 @@ export function quizLevel(card: Card | null): 0 | 1 | 2 {
 }
 
 export function eligibleTypes(w: Word, level: 0 | 1 | 2, isPhraseCard = false): QuizType[] {
+  // 自定义词书里没有释义的词：看释义的题都出不了，只能听音选词
+  if (!shortMeaning(w)) return ['listen']
   const types: QuizType[] = ['en2cn', 'cn2en', 'listen']
   if (isPhraseCard) return types
   if (level >= 1) {
@@ -157,9 +159,9 @@ export function eligibleTypes(w: Word, level: 0 | 1 | 2, isPhraseCard = false): 
   return types
 }
 
-/** 第一次见固定"看英文选中文"（最容易）；之后在可出的题型里随机，不连续两次同一种 */
+/** 第一次见固定"看英文选中文"（最容易，出不了时用第一个可出的）；之后在可出的题型里随机，不连续两次同一种 */
 export function chooseQuizType(eligible: QuizType[], last: QuizType | undefined, firstExposure: boolean, rng: Rng): QuizType {
-  if (firstExposure) return 'en2cn'
+  if (firstExposure) return eligible.includes('en2cn') ? 'en2cn' : eligible[0]
   const choices = eligible.filter((t) => t !== last)
   const from = choices.length ? choices : eligible
   return from[Math.floor(rng() * from.length)]

@@ -84,3 +84,16 @@ export const BulbIcon = ({ className = 'size-5' }: P) => (
     <path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.5.4.9 1 .9 1.6V16h5.2v-.5c0-.6.4-1.2.9-1.6A6 6 0 0 0 12 3z" />
   </svg>
 )
+
+export const StarIcon = ({ className = 'size-6', filled = false }: P & { filled?: boolean }) => (
+  <svg viewBox="0 0 24 24" className={className} {...base} fill={filled ? 'currentColor' : 'none'} aria-hidden>
+    <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z" />
+  </svg>
+)
+
+export const SearchIcon = ({ className = 'size-5' }: P) => (
+  <svg viewBox="0 0 24 24" className={className} {...base} aria-hidden>
+    <circle cx="11" cy="11" r="7" />
+    <path d="m20 20-3.5-3.5" />
+  </svg>
+)

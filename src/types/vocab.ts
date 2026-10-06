@@ -51,9 +51,14 @@ export interface BookMeta {
   /** 内容哈希；变化时应用会重新导入词条 */
   version: string
   file: string
+  /** 文件大小（字节），词书页用来提示下载量 */
+  bytes?: number
 }
 
 export interface BookIndex {
   generatedAt: string
   books: BookMeta[]
 }
+
+/** 内置常用词典的一条：[单词, 音标, [[词性, 释义], ...]]。按首字母分片放在 public/dict/ */
+export type DictEntry = [word: string, ipa: string, meanings: [pos: string, cn: string][]]

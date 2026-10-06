@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react'
 import { unlockAudio } from '../audio/player'
 import { FlameIcon } from '../components/icons'
 import { Card, PrimaryButton, Ring } from '../components/ui'
-import { loadIndex } from '../db/books'
+import { allBooks } from '../db/books'
+import { LAST_BACKUP_KEY, SNOOZE_KEY } from '../db/backupDb'
+import { needsBackupReminder } from '../lib/backup'
 import { navigate } from '../lib/router'
 import { useSettings } from '../lib/settings'
 import { useLive } from '../lib/useLive'
@@ -19,14 +21,25 @@ export function TodayPage() {
   // 任何学习记录变化都刷新（liveQuery 监听 cards/daily 表）
   const tick = useLive(() => Promise.all([db.cards.count(), db.daily.get(dayKey(Date.now()))]), [])
   const st = useLive(async () => streak(await db.daily.toArray(), dayKey(Date.now())), [])
+  const backup = useLive(async () => {
+    const last = (await db.kv.get(LAST_BACKUP_KEY))?.value as number | undefined
+    const snoozedUntil = (await db.kv.get(SNOOZE_KEY))?.value as number | undefined
+    const firstLearnedAt = (await db.reviewLogs.orderBy('ts').first())?.ts
+    const now = Date.now()
+    return {
+      show: needsBackupReminder({ now, days: s.backupDays, lastBackupAt: last, firstLearnedAt, snoozedUntil }),
+      days: Math.floor((now - (last ?? firstLearnedAt ?? now)) / 86_400_000),
+      never: !last,
+    }
+  }, [s.backupDays])
 
   useEffect(() => {
     let alive = true
     todaySummary(Date.now())
       .then((r) => alive && (setSum(r), setError('')))
       .catch((e) => alive && setError(String(e.message ?? e)))
-    loadIndex()
-      .then((i) => alive && setBookName(i.books.find((b) => b.id === s.currentBookId)?.name ?? ''))
+    allBooks()
+      .then((books) => alive && setBookName(books.find((b) => b.id === s.currentBookId)?.name ?? ''))
       .catch(() => {})
     return () => {
       alive = false
@@ -83,6 +96,28 @@ export function TodayPage() {
         </span>
         <span className="text-sm text-emerald-600 dark:text-emerald-400">切换 ›</span>
       </button>
+
+      {backup?.show && (
+        <div className="mt-3 flex items-center gap-3 rounded-2xl bg-amber-50 px-4 py-3 text-sm dark:bg-amber-950/60">
+          <p className="flex-1 text-amber-800 dark:text-amber-200">
+            {backup.never ? `已经学了 ${backup.days} 天，还没备份过学习记录` : `已经 ${backup.days} 天没备份学习记录了`}
+          </p>
+          <button
+            type="button"
+            onClick={() => db.kv.put({ key: SNOOZE_KEY, value: Date.now() + 86_400_000 })}
+            className="shrink-0 px-1 py-2 text-amber-700/70 dark:text-amber-300/70"
+          >
+            明天再说
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate('data')}
+            className="shrink-0 rounded-xl bg-amber-500 px-3 py-2 font-semibold text-white active:bg-amber-600"
+          >
+            去备份
+          </button>
+        </div>
+      )}
 
       {error && (
         <Card className="mt-4 text-sm text-rose-600">

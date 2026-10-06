@@ -1,6 +1,6 @@
 // 学习数据读写：把纯逻辑（session / practice）和数据库连起来
 import { createEmptyCard } from 'ts-fsrs'
-import { bookWordIds, ensureBook, loadIndex } from '../db/books'
+import { allBooks, bookWordIds, ensureBook } from '../db/books'
 import { db, emptyDaily, type DailyRow, type MistakeRow, type QuizType } from '../db/db'
 import { dayEnd, dayKey } from '../lib/date'
 import { getSettings } from '../lib/settings'
@@ -24,7 +24,7 @@ export function newAllowance(daily: DailyRow, dailyNew: number) {
  */
 export async function pickNewWords(n: number, startBookId: string): Promise<{ bookId: string; wordId: string }[]> {
   if (n <= 0) return []
-  const { books } = await loadIndex()
+  const books = await allBooks()
   const start = Math.max(0, books.findIndex((b) => b.id === startBookId))
   const learned = new Set(await db.cards.toCollection().primaryKeys())
   const picked: { bookId: string; wordId: string }[] = []
@@ -67,10 +67,13 @@ async function assemble(reviews: SessionItem[], news: SessionItem[], now: number
   const words = new Map<string, Word>()
   for (const w of await db.words.bulkGet([...new Set(all.map((i) => i.wordId))])) if (w) words.set(w.id, w)
 
+  const poolOf = async (bookId: string) => (await db.words.bulkGet(await bookWordIds(bookId))).filter((w): w is Word => !!w)
   const pools = new Map<string, Word[]>()
-  for (const bookId of new Set(all.map((i) => i.bookId))) {
-    const ids = await bookWordIds(bookId)
-    pools.set(bookId, (await db.words.bulkGet(ids)).filter((w): w is Word => !!w))
+  for (const bookId of new Set(all.map((i) => i.bookId))) pools.set(bookId, await poolOf(bookId))
+  // 查词手动加入的词（bookId=manual）或很小的自定义词书凑不够干扰项：用当前词书补足
+  if ([...pools.values()].some((p) => p.length < 8)) {
+    const fallback = await poolOf(getSettings().currentBookId)
+    for (const [k, p] of pools) if (p.length < 8) pools.set(k, [...p, ...fallback.filter((w) => !p.some((x) => x.id === w.id))])
   }
   const has = (i: SessionItem) => {
     const w = words.get(i.wordId)
@@ -252,4 +255,30 @@ export async function mistakeViews(): Promise<MistakeView[]> {
     }
   })
   return out
+}
+
+// ---------- 生词本、手动加入学习 ----------
+
+/** 收藏 / 取消收藏。词典里查到的词先存进词库，生词本才能显示 */
+export async function toggleFavorite(word: Word): Promise<boolean> {
+  const fav = await db.favorites.get(word.id)
+  if (fav) {
+    await db.favorites.delete(word.id)
+    return false
+  }
+  await db.transaction('rw', db.words, db.favorites, async () => {
+    if (!(await db.words.get(word.id))) await db.words.put(word)
+    await db.favorites.put({ wordId: word.id, addedAt: Date.now() })
+  })
+  return true
+}
+
+/** 查词时把任意一个词加入学习：今天就作为新卡出现（不占每日新词名额） */
+export async function addWordCard(word: Word, now = Date.now()) {
+  const id = wordCardId(word.id)
+  if (await db.cards.get(id)) return
+  await db.transaction('rw', db.words, db.cards, async () => {
+    if (!(await db.words.get(word.id))) await db.words.put(word)
+    await db.cards.put(fromFsrs(createEmptyCard(new Date(now)), { id, kind: 'word', refId: word.id, bookId: 'manual', createdAt: now }))
+  })
 }
