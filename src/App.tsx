@@ -3,6 +3,9 @@ import { TabBar } from './components/TabBar'
 import { useRoute } from './lib/router'
 import { useSettings } from './lib/settings'
 import { BooksPage } from './pages/BooksPage'
+import { MePage } from './pages/MePage'
+import { MistakesPage } from './pages/MistakesPage'
+import { StatsPage } from './pages/StatsPage'
 import { SettingsPage } from './pages/SettingsPage'
 import { StudyPage } from './pages/StudyPage'
 import { TodayPage } from './pages/TodayPage'
@@ -25,11 +28,15 @@ function useTheme() {
 export function App() {
   const route = useRoute()
   useTheme()
-  if (route === 'study') return <StudyPage />
+  if (route === 'study') return <StudyPage key="today" mode="today" />
+  if (route === 'practice') return <StudyPage key="practice" mode="practice" />
   return (
     <>
       {route === 'today' && <TodayPage />}
       {route === 'books' && <BooksPage />}
+      {route === 'stats' && <StatsPage />}
+      {route === 'me' && <MePage />}
+      {route === 'mistakes' && <MistakesPage />}
       {route === 'settings' && <SettingsPage />}
       <TabBar current={route} />
     </>

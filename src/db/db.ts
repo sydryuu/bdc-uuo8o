@@ -17,7 +17,8 @@ export interface BookWordRow {
   rank: number
 }
 
-export type QuizType = 'en2cn' | 'cn2en'
+/** 题型：看英文选中文 / 看中文选英文 / 听音选词 / 拼写 / 例句填空 / 短语搭配 */
+export type QuizType = 'en2cn' | 'cn2en' | 'listen' | 'spell' | 'cloze' | 'phrase'
 
 export interface ReviewLogRow {
   id?: number

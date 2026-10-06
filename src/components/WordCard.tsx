@@ -1,4 +1,9 @@
-import type { Word } from '../types/vocab'
+import { db } from '../db/db'
+import { useLive } from '../lib/useLive'
+import { addPhraseCard, removePhraseCard } from '../srs/store'
+import { phraseCardId, State } from '../srs/scheduler'
+import type { Phrase, Word } from '../types/vocab'
+import { CheckIcon, PlusIcon } from './icons'
 import { SpeakButton } from './SpeakButton'
 
 export function PosTag({ pos }: { pos: string }) {
@@ -28,8 +33,37 @@ export function Phonetics({ word }: { word: Word }) {
   )
 }
 
-/** 完整单词卡：单词、音标、释义、例句、短语 */
-export function WordCard({ word, compact = false }: { word: Word; compact?: boolean }) {
+/** 短语"加入学习"开关：没学过的可以再移出，学过的显示已加入 */
+function AddPhraseButton({ word, phrase, bookId, state }: { word: Word; phrase: Phrase; bookId: string; state: State | undefined }) {
+  const added = state !== undefined
+  return (
+    <button
+      type="button"
+      aria-label={added ? `已加入学习：${phrase.en}` : `把 ${phrase.en} 加入学习`}
+      disabled={added && state !== State.New}
+      onClick={(e) => {
+        e.stopPropagation()
+        if (added) removePhraseCard(phrase.id)
+        else addPhraseCard(word, phrase, bookId)
+      }}
+      className={`inline-flex h-8 shrink-0 items-center gap-0.5 rounded-full px-2.5 text-xs font-semibold transition ${
+        added
+          ? 'bg-emerald-500 text-white disabled:opacity-60'
+          : 'border border-emerald-500 text-emerald-600 active:bg-emerald-50 dark:text-emerald-400 dark:active:bg-emerald-950'
+      }`}
+    >
+      {added ? <CheckIcon className="size-3.5" /> : <PlusIcon className="size-3.5" />}
+      {added ? '已加' : '学'}
+    </button>
+  )
+}
+
+/** 完整单词卡：单词、音标、释义、例句、短语。传入 bookId 时短语可以单独加入学习 */
+export function WordCard({ word, compact = false, bookId }: { word: Word; compact?: boolean; bookId?: string }) {
+  const phraseStates = useLive(async () => {
+    const rows = await db.cards.bulkGet(word.phrases.map((p) => phraseCardId(p.id)))
+    return new Map(rows.filter((r) => !!r).map((r) => [r!.refId, r!.state]))
+  }, [word.id])
   return (
     <div className="animate-rise">
       <div className="text-center">
@@ -67,7 +101,9 @@ export function WordCard({ word, compact = false }: { word: Word; compact?: bool
 
       {!compact && word.phrases.length > 0 && (
         <section className="mt-6">
-          <h2 className="mb-2 text-sm font-semibold text-stone-400">常用短语</h2>
+          <h2 className="mb-2 text-sm font-semibold text-stone-400">
+            常用短语{bookId && <span className="ml-2 font-normal">点"学"可以单独背这个短语</span>}
+          </h2>
           <ul className="divide-y divide-stone-200 dark:divide-stone-800">
             {word.phrases.map((p) => (
               <li key={p.id} className="flex items-center gap-2 py-0.5">
@@ -76,6 +112,7 @@ export function WordCard({ word, compact = false }: { word: Word; compact?: bool
                   <span className="ml-2 text-sm text-stone-500 dark:text-stone-400">{p.cn}</span>
                 </div>
                 <SpeakButton text={p.en} label="朗读短语" />
+                {bookId && <AddPhraseButton word={word} phrase={p} bookId={bookId} state={phraseStates?.get(p.id)} />}
               </li>
             ))}
           </ul>

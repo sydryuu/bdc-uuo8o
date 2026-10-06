@@ -41,3 +41,46 @@ export const CheckIcon = ({ className = 'size-6' }: P) => (
     <path d="M5 12.5 10 17.5 19 7" />
   </svg>
 )
+
+export const ChartIcon = ({ className = 'size-6' }: P) => (
+  <svg viewBox="0 0 24 24" className={className} {...base} aria-hidden>
+    <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
+  </svg>
+)
+
+export const UserIcon = ({ className = 'size-6' }: P) => (
+  <svg viewBox="0 0 24 24" className={className} {...base} aria-hidden>
+    <circle cx="12" cy="8" r="4" />
+    <path d="M4 21a8 8 0 0 1 16 0" />
+  </svg>
+)
+
+export const FlameIcon = ({ className = 'size-6' }: P) => (
+  <svg viewBox="0 0 24 24" className={className} aria-hidden fill="currentColor">
+    <path d="M12 2c.6 3.2-1 5.1-2.6 6.9C7.8 10.7 6 12.6 6 15.5A6 6 0 0 0 12 21.5a6 6 0 0 0 6-6c0-2.4-1-4.2-2.2-5.6-.3 1.3-1 2.3-2 2.8.4-3.7-.5-7.6-1.8-10.7z" />
+  </svg>
+)
+
+export const ChevronIcon = ({ className = 'size-5' }: P) => (
+  <svg viewBox="0 0 24 24" className={className} {...base} aria-hidden>
+    <path d="m9 6 6 6-6 6" />
+  </svg>
+)
+
+export const BackIcon = ({ className = 'size-6' }: P) => (
+  <svg viewBox="0 0 24 24" className={className} {...base} aria-hidden>
+    <path d="m15 6-6 6 6 6" />
+  </svg>
+)
+
+export const PlusIcon = ({ className = 'size-5' }: P) => (
+  <svg viewBox="0 0 24 24" className={className} {...base} aria-hidden>
+    <path d="M12 5v14M5 12h14" />
+  </svg>
+)
+
+export const BulbIcon = ({ className = 'size-5' }: P) => (
+  <svg viewBox="0 0 24 24" className={className} {...base} aria-hidden>
+    <path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.5.4.9 1 .9 1.6V16h5.2v-.5c0-.6.4-1.2.9-1.6A6 6 0 0 0 12 3z" />
+  </svg>
+)

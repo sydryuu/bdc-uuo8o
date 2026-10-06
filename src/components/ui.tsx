@@ -73,3 +73,45 @@ export function ProgressBar({ value, className = '' }: { value: number; classNam
     </div>
   )
 }
+
+/** 环形进度（多邻国式的每日目标环） */
+export function Ring({ value, size = 96, stroke = 10, children }: { value: number; size?: number; stroke?: number; children?: ReactNode }) {
+  const r = (size - stroke) / 2
+  const c = 2 * Math.PI * r
+  const v = Math.min(1, Math.max(0, value))
+  return (
+    <div className="relative shrink-0" style={{ width: size, height: size }}>
+      <svg width={size} height={size} className="-rotate-90" aria-hidden>
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" strokeWidth={stroke} className="stroke-stone-200 dark:stroke-stone-800" />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          fill="none"
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          strokeDasharray={c}
+          strokeDashoffset={c * (1 - v)}
+          className="stroke-emerald-500 transition-[stroke-dashoffset] duration-500"
+          style={{ opacity: v > 0 ? 1 : 0 }}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">{children}</div>
+    </div>
+  )
+}
+
+/** 子页面顶部：返回按钮 + 标题 */
+export function SubHeader({ title, back, backLabel }: { title: string; back: () => void; backLabel: string }) {
+  return (
+    <header className="safe-top pb-2">
+      <button type="button" onClick={back} className="-ml-2 flex min-h-11 items-center pr-3 text-emerald-600 dark:text-emerald-400">
+        <svg viewBox="0 0 24 24" className="size-6" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <path d="m15 6-6 6 6 6" />
+        </svg>
+        {backLabel}
+      </button>
+      <h1 className="mt-1 text-2xl font-bold">{title}</h1>
+    </header>
+  )
+}

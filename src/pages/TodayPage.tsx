@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { unlockAudio } from '../audio/player'
-import { Card, PrimaryButton, ProgressBar } from '../components/ui'
+import { FlameIcon } from '../components/icons'
+import { Card, PrimaryButton, Ring } from '../components/ui'
 import { loadIndex } from '../db/books'
 import { navigate } from '../lib/router'
 import { useSettings } from '../lib/settings'
@@ -8,6 +9,7 @@ import { useLive } from '../lib/useLive'
 import { addExtraNew, todaySummary, type TodaySummary } from '../srs/store'
 import { db } from '../db/db'
 import { dayKey } from '../lib/date'
+import { streak } from '../srs/stats'
 
 export function TodayPage() {
   const s = useSettings()
@@ -16,6 +18,7 @@ export function TodayPage() {
   const [bookName, setBookName] = useState('')
   // 任何学习记录变化都刷新（liveQuery 监听 cards/daily 表）
   const tick = useLive(() => Promise.all([db.cards.count(), db.daily.get(dayKey(Date.now()))]), [])
+  const st = useLive(async () => streak(await db.daily.toArray(), dayKey(Date.now())), [])
 
   useEffect(() => {
     let alive = true
@@ -38,6 +41,9 @@ export function TodayPage() {
   const todo = sum ? sum.reviewDue + sum.newLeft : 0
   const done = sum ? sum.daily.correct + sum.daily.wrong : 0
   const goal = Math.max(1, s.dailyNew + (sum?.daily.extraNew ?? 0))
+  // 今日任务环：已完成（新学 + 复习）/（已完成 + 还剩的）
+  const finished = sum ? sum.daily.newCount + sum.daily.reviewCount : 0
+  const ringValue = sum ? (todo === 0 ? 1 : finished / (finished + todo)) : 0
   const now = new Date()
   const hour = now.getHours()
   const greet = hour < 5 ? '夜深了' : hour < 11 ? '早上好' : hour < 14 ? '中午好' : hour < 18 ? '下午好' : '晚上好'
@@ -48,7 +54,22 @@ export function TodayPage() {
         <p className="pt-2 text-sm text-stone-400">
           {now.getMonth() + 1}月{now.getDate()}日 · 星期{'日一二三四五六'[now.getDay()]}
         </p>
-        <h1 className="mt-1 text-2xl font-bold">{greet}</h1>
+        <div className="mt-1 flex items-center justify-between">
+          <h1 className="text-2xl font-bold">{greet}</h1>
+          {st && (
+            <button
+              type="button"
+              onClick={() => navigate('stats')}
+              aria-label={`连续学习 ${st.current} 天`}
+              className={`flex items-center gap-1 rounded-full px-3 py-1 text-lg font-bold tabular-nums ${
+                st.todayDone ? 'bg-amber-100 text-amber-600 dark:bg-amber-950 dark:text-amber-400' : 'bg-stone-200/70 text-stone-400 dark:bg-stone-800'
+              }`}
+            >
+              <FlameIcon className="size-5" />
+              {st.current}
+            </button>
+          )}
+        </div>
       </header>
 
       <button
@@ -71,26 +92,30 @@ export function TodayPage() {
         </Card>
       )}
 
-      <div className="mt-4 grid grid-cols-2 gap-3">
-        <Card>
-          <p className="text-sm text-stone-400">待复习</p>
-          <p className="mt-1 text-4xl font-bold tabular-nums">{sum?.reviewDue ?? '–'}</p>
-        </Card>
-        <Card>
-          <p className="text-sm text-stone-400">新词</p>
-          <p className="mt-1 text-4xl font-bold tabular-nums">{sum?.newLeft ?? '–'}</p>
-        </Card>
-      </div>
-
-      <Card className="mt-3">
-        <div className="flex items-baseline justify-between">
-          <p className="text-sm text-stone-400">今日新词进度</p>
-          <p className="text-sm tabular-nums text-stone-500">
-            {sum?.daily.newCount ?? 0} / {goal}
+      <Card className="mt-4 flex items-center gap-5">
+        <Ring value={ringValue} size={104} stroke={11}>
+          {sum && todo === 0 ? (
+            <span className="text-3xl">✓</span>
+          ) : (
+            <>
+              <span className="text-2xl font-bold tabular-nums">{Math.round(ringValue * 100)}%</span>
+              <span className="text-[10px] text-stone-400">今日任务</span>
+            </>
+          )}
+        </Ring>
+        <div className="flex-1 space-y-2">
+          <div className="flex items-baseline justify-between">
+            <span className="text-sm text-stone-400">待复习</span>
+            <span className="text-2xl font-bold tabular-nums">{sum?.reviewDue ?? '–'}</span>
+          </div>
+          <div className="flex items-baseline justify-between">
+            <span className="text-sm text-stone-400">新词</span>
+            <span className="text-2xl font-bold tabular-nums">{sum?.newLeft ?? '–'}</span>
+          </div>
+          <p className="text-xs text-stone-400">
+            已学新词 {sum?.daily.newCount ?? 0}/{goal} · 已答 {done} 次
           </p>
         </div>
-        <ProgressBar className="mt-2" value={(sum?.daily.newCount ?? 0) / goal} />
-        <p className="mt-2 text-xs text-stone-400">今天已答 {done} 次 · 复习 {sum?.daily.reviewCount ?? 0} 次</p>
       </Card>
 
       <div className="mt-8">

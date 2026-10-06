@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { speak } from '../audio/player'
-import { Segmented, Stepper, Toggle } from '../components/ui'
+import { Segmented, Stepper, SubHeader, Toggle } from '../components/ui'
+import { navigate } from '../lib/router'
 import { isPersisted } from '../lib/feedback'
 import { updateSettings, useSettings, type Accent, type Theme } from '../lib/settings'
 
@@ -32,9 +33,7 @@ export function SettingsPage() {
   const persisted = isPersisted()
   return (
     <div className="mx-auto max-w-lg px-4 pb-28">
-      <header className="safe-top pb-2">
-        <h1 className="pt-2 text-2xl font-bold">设置</h1>
-      </header>
+      <SubHeader title="设置" back={() => navigate('me', { replace: true })} backLabel="我的" />
 
       <Group title="学习">
         <Row title="每日新词" hint="初学者建议 5–10 个">

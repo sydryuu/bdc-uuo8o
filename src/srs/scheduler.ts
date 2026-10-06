@@ -28,6 +28,8 @@ export interface CardRow {
   id: string // "w:ruler" / "p:talk about"
   kind: CardKind
   refId: string // 单词 id 或短语 id
+  /** 短语卡所属的单词 id（单词卡不填） */
+  wordId?: string
   bookId: string // 从哪本书学的（出干扰项用）
   due: number
   stability: number
@@ -43,6 +45,7 @@ export interface CardRow {
 }
 
 export const wordCardId = (wordId: string) => `w:${wordId}`
+export const phraseCardId = (phraseId: string) => `p:${phraseId}`
 
 export function toFsrs(row: CardRow): Card {
   return {
@@ -59,7 +62,7 @@ export function toFsrs(row: CardRow): Card {
   }
 }
 
-export function fromFsrs(card: Card, meta: Pick<CardRow, 'id' | 'kind' | 'refId' | 'bookId' | 'createdAt'>): CardRow {
+export function fromFsrs(card: Card, meta: Pick<CardRow, 'id' | 'kind' | 'refId' | 'bookId' | 'createdAt' | 'wordId'>): CardRow {
   return {
     ...meta,
     due: card.due.getTime(),

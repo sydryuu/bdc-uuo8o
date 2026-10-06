@@ -5,7 +5,10 @@ import { rate, State, type Card, type Grade } from './scheduler'
 
 export interface SessionItem {
   cardId: string
+  /** 单词卡：单词 id；短语卡：所属单词 id */
   wordId: string
+  /** 短语卡才有 */
+  phraseId?: string
   bookId: string
   /** null 表示今天要学、但还没见过的新词 */
   card: Card | null
