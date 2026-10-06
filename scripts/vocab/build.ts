@@ -62,6 +62,11 @@ mkdirSync(OUT, { recursive: true })
 const metas: BookMeta[] = []
 for (const { spec, entries } of perBook) {
   let words = applyOverrides(spec.id, dedupe(entries.map((e) => mergeEntry(e, ec.get(cleanHeadword(e.word).toLowerCase())))), overrides)
+  if (spec.excludeTags?.length) {
+    const before = words.length
+    words = words.filter((w) => !w.tags.some((t) => spec.excludeTags!.includes(t)))
+    console.log(`  ${spec.name}：去掉中学已覆盖的 ${before - words.length} 个词`)
+  }
   if (spec.sort === 'frequency') {
     // 稳定排序：词频相同（或未知）时保持原顺序
     words = words

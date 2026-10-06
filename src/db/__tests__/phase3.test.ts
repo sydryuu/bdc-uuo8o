@@ -52,7 +52,7 @@ describe('词书目录', () => {
       ...Array.from({ length: 11 }, (_, i) => `pep-hs${i + 1}`),
       'cet4', 'cet6',
     ])
-    expect(books.find((b) => b.id === 'cet4')!.bytes).toBeGreaterThan(1_000_000)
+    expect(books.find((b) => b.id === 'cet4')!.bytes).toBeGreaterThan(500_000)
   })
 })
 

@@ -12,6 +12,8 @@ export interface BookSpec {
   kbBookId?: string
   /** 新词顺序：source = 按课本原顺序；frequency = 常用词先学（ECDICT 词频） */
   sort?: 'source' | 'frequency'
+  /** 去掉 ECDICT 带这些考试标签的词（四六级去掉中考 zk、高考 gk 已覆盖的中学词） */
+  excludeTags?: string[]
   /** 是否预缓存进 Service Worker（小学词书小，随应用一起离线；大词书选中时再下载） */
   precache?: boolean
 }
@@ -68,9 +70,9 @@ export const BOOKS: BookSpec[] = [
   junior(8, 2),
   junior(9),
   ...Array.from({ length: 11 }, (_, i) => senior(i + 1)),
-  // 四六级原始数据由几个版本拼成且接近字母序，按词频重排、去重
-  { id: 'cet4', name: '大学英语四级', stage: 'cet4', order: 200, kbFile: '四级', sort: 'frequency' },
-  { id: 'cet6', name: '大学英语六级', stage: 'cet6', order: 300, kbFile: '六级', sort: 'frequency' },
+  // 四六级原始数据由几个版本拼成且接近字母序：按词频重排、去重，并去掉中考/高考已覆盖的中学词
+  { id: 'cet4', name: '大学英语四级', stage: 'cet4', order: 200, kbFile: '四级', sort: 'frequency', excludeTags: ['zk', 'gk'] },
+  { id: 'cet6', name: '大学英语六级', stage: 'cet6', order: 300, kbFile: '六级', sort: 'frequency', excludeTags: ['zk', 'gk'] },
 ]
 
 const RAW = 'https://raw.githubusercontent.com'

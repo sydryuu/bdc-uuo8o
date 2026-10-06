@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-06T05:25:35.055Z",
+  "generatedAt": "2026-10-06T05:29:50.393Z",
   "books": [
     {
       "id": "pep-3a",
@@ -271,10 +271,10 @@
       "stage": "cet4",
       "stageName": "四级",
       "order": 200,
-      "wordCount": 4544,
-      "version": "5fd9e6896a",
+      "wordCount": 1847,
+      "version": "b8cb2c4365",
       "file": "books/cet4.json",
-      "bytes": 2809543
+      "bytes": 1051381
     },
     {
       "id": "cet6",
@@ -282,10 +282,10 @@
       "stage": "cet6",
       "stageName": "六级",
       "order": 300,
-      "wordCount": 3991,
-      "version": "b813a34008",
+      "wordCount": 2920,
+      "version": "07256461ce",
       "file": "books/cet6.json",
-      "bytes": 2243642
+      "bytes": 1557519
     }
   ]
 }
