@@ -53,6 +53,11 @@ npm run lan           # 打包，然后用 https 在 4173 端口启动
 
 ## 部署（正式使用）
 
+**当前线上地址**：https://sydryuu.github.io/bdc-uuo8o/（仓库 `sydryuu/bdc-uuo8o`，公开，页面设置了 noindex）
+
+更新方法：改完代码后执行 `git push`。GitHub Actions 会自动跑测试、打包并部署（`.github/workflows/deploy.yml`），大约 1 分钟后生效。已经装到主屏幕的应用，下次打开时会自动更新。
+
+
 这是一个纯静态站点，`npm run build` 生成的 `dist/` 放到任何支持 HTTPS 的静态托管上就能用。
 
 **装到主屏幕以后，平时使用都走本地缓存**：服务器速度只影响第一次打开和版本更新。

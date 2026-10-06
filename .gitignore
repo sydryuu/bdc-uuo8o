@@ -5,3 +5,4 @@ data/raw
 certs
 *.part
 .DS_Store
+qr.png
